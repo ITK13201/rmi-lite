@@ -1,18 +1,23 @@
 <!-- $Id: build.xml,v 1.4 2003/06/25 17:19:18 cowboyd Exp $ -->
 <project name='rmi-lite' basedir='.' default='compile'>
+	<property name="src.dir" value="src"/>
 	<property name='build.dir' value='build'/>
 	<property name='class.dir' value='${build.dir}/classes'/>
 	<property name='test.class.dir' value='${build.dir}/test-classes'/>
+	<property name="docs.dir" value="docs"/>
 	<property name='version' value='1.0'/>
     <property name='distname' value='${ant.project.name}-${version}'/>
 	<property name='jarfile' value='${ant.project.name}.jar'/>
 	<property name='tarfile' value='${distname}.tar'/>
 	<property name='tgzfile' value='${distname}.tgz'/>
+	<property name="pkgname" value="RMILite"/>
+	<property name="ant.build.javac.source" value="1.6"/>
 
 	<property name='junit.jar' value='junit-3.8.1.jar'/>
 
 	<target name="clean">
 		<delete dir='${build.dir}'/>
+		<delete dir="${docs.dir}"/>
 		<delete file='${jarfile}'/>
 		<delete file='${tarfile}'/>
 		<delete file='${tgzfile}'/>
@@ -64,5 +69,23 @@
 		</tar>
 		<gzip zipfile='${tgzfile}' src='${tarfile}'/>
 		<delete file='${tarfile}'/>
+	</target>
+
+	<target name="javadoc" description="creates the API documentation">
+		<mkdir dir="${docs.dir}"/>
+		<javadoc useexternalfile="yes"
+			destdir="${docs.dir}"
+			author="true"
+			version="true"
+			locale="en"
+			windowtitle="${pkgname} API"
+			doctitle="${pkgname}"
+			defaultexcludes="yes">
+
+			<packageset dir="${src.dir}" defaultexcludes="yes">
+				<include name="**"/>
+			</packageset>
+			<group title="${pkgname} API" packages="${ant.project.name}*"/>
+		</javadoc>
 	</target>
 </project>
